@@ -34,7 +34,7 @@ class CoreDataManager {
         }
     }
 
-    func saveForm(_ form: Form) {
+    func saveForm(_ form: FormModel) {
         let formEntity = FormEntity(context: context)
         formEntity.title = form.title
 

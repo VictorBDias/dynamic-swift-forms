@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Form: Codable {
+struct FormModel: Codable {
     let title: String
     let fields: [FormField]
     let sections: [FormSection]?
