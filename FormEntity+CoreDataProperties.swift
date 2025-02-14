@@ -2,7 +2,7 @@
 //  FormEntity+CoreDataProperties.swift
 //  cloud-evaluation
 //
-//  Created by Victor Batisttete Dias on 13/02/25.
+//  Created by Victor Batisttete Dias on 14/02/25.
 //
 //
 
@@ -16,7 +16,6 @@ extension FormEntity {
         return NSFetchRequest<FormEntity>(entityName: "FormEntity")
     }
 
-    @NSManaged public var timestamp: Date?
     @NSManaged public var title: String?
     @NSManaged public var fields: NSSet?
     @NSManaged public var sections: NSSet?

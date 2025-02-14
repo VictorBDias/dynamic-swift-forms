@@ -6,6 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4FFE23582D5EE9D20013CB33 /* SectionEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE23572D5EE9D20013CB33 /* SectionEntity+CoreDataProperties.swift */; };
+		4FFE23592D5EE9D20013CB33 /* FieldEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE23522D5EE9D20013CB33 /* FieldEntity+CoreDataClass.swift */; };
+		4FFE235A2D5EE9D20013CB33 /* SectionEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE23562D5EE9D20013CB33 /* SectionEntity+CoreDataClass.swift */; };
+		4FFE235B2D5EE9D20013CB33 /* FormEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE23542D5EE9D20013CB33 /* FormEntity+CoreDataClass.swift */; };
+		4FFE235C2D5EE9D20013CB33 /* FieldEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE23532D5EE9D20013CB33 /* FieldEntity+CoreDataProperties.swift */; };
+		4FFE235D2D5EE9D20013CB33 /* FormEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE23552D5EE9D20013CB33 /* FormEntity+CoreDataProperties.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4FFE21B42D5EB6E80013CB33 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +36,12 @@
 		4FFE219D2D5EB6E70013CB33 /* cloud-evaluation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "cloud-evaluation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FFE21B32D5EB6E80013CB33 /* cloud-evaluationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "cloud-evaluationTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FFE21BD2D5EB6E80013CB33 /* cloud-evaluationUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "cloud-evaluationUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FFE23522D5EE9D20013CB33 /* FieldEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FieldEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		4FFE23532D5EE9D20013CB33 /* FieldEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FieldEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		4FFE23542D5EE9D20013CB33 /* FormEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		4FFE23552D5EE9D20013CB33 /* FormEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		4FFE23562D5EE9D20013CB33 /* SectionEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SectionEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		4FFE23572D5EE9D20013CB33 /* SectionEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SectionEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +90,12 @@
 		4FFE21942D5EB6E70013CB33 = {
 			isa = PBXGroup;
 			children = (
+				4FFE23522D5EE9D20013CB33 /* FieldEntity+CoreDataClass.swift */,
+				4FFE23532D5EE9D20013CB33 /* FieldEntity+CoreDataProperties.swift */,
+				4FFE23542D5EE9D20013CB33 /* FormEntity+CoreDataClass.swift */,
+				4FFE23552D5EE9D20013CB33 /* FormEntity+CoreDataProperties.swift */,
+				4FFE23562D5EE9D20013CB33 /* SectionEntity+CoreDataClass.swift */,
+				4FFE23572D5EE9D20013CB33 /* SectionEntity+CoreDataProperties.swift */,
 				4FFE219F2D5EB6E70013CB33 /* cloud-evaluation */,
 				4FFE21B62D5EB6E80013CB33 /* cloud-evaluationTests */,
 				4FFE21C02D5EB6E80013CB33 /* cloud-evaluationUITests */,
@@ -236,6 +257,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FFE23582D5EE9D20013CB33 /* SectionEntity+CoreDataProperties.swift in Sources */,
+				4FFE23592D5EE9D20013CB33 /* FieldEntity+CoreDataClass.swift in Sources */,
+				4FFE235A2D5EE9D20013CB33 /* SectionEntity+CoreDataClass.swift in Sources */,
+				4FFE235B2D5EE9D20013CB33 /* FormEntity+CoreDataClass.swift in Sources */,
+				4FFE235C2D5EE9D20013CB33 /* FieldEntity+CoreDataProperties.swift in Sources */,
+				4FFE235D2D5EE9D20013CB33 /* FormEntity+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
