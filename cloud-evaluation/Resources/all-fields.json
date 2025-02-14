@@ -1,0 +1,169 @@
+{
+  "title": "All fields form",
+  "fields": [
+    {
+      "type": "text",
+      "label": "First Name",
+      "name": "first_name",
+      "required": true,
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000001"
+    },
+    {
+      "type": "text",
+      "label": "Last Name",
+      "name": "last_name",
+      "required": true,
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000002"
+    },
+    {
+      "type": "email",
+      "label": "Email",
+      "name": "email",
+      "required": true,
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000003"
+    },
+    {
+      "type": "password",
+      "label": "Password",
+      "name": "password",
+      "required": true,
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000004"
+    },
+    {
+      "type": "number",
+      "label": "Age",
+      "name": "age",
+      "required": false,
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000005"
+    },
+    {
+      "type": "date",
+      "label": "Date of Birth",
+      "name": "dob",
+      "required": true,
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000006"
+    },
+    {
+      "type": "radio",
+      "label": "Gender",
+      "name": "gender",
+      "required": true,
+      "options": [
+        {
+          "label": "Male",
+          "value": "male"
+        },
+        {
+          "label": "Female",
+          "value": "female"
+        },
+        {
+          "label": "Other",
+          "value": "other"
+        }
+      ],
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000007"
+    },
+    {
+      "type": "checkbox",
+      "label": "Hobbies",
+      "name": "hobbies",
+      "required": false,
+      "options": [
+        {
+          "label": "Reading",
+          "value": "reading"
+        },
+        {
+          "label": "Traveling",
+          "value": "traveling"
+        },
+        {
+          "label": "Cooking",
+          "value": "cooking"
+        },
+        {
+          "label": "Sports",
+          "value": "sports"
+        }
+      ],
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000008"
+    },
+    {
+      "type": "dropdown",
+      "label": "Country",
+      "name": "country",
+      "required": true,
+      "options": [
+        {
+          "label": "United States",
+          "value": "us"
+        },
+        {
+          "label": "Canada",
+          "value": "ca"
+        },
+        {
+          "label": "United Kingdom",
+          "value": "uk"
+        },
+        {
+          "label": "Australia",
+          "value": "au"
+        },
+        {
+          "label": "Brazil",
+          "value": "br"
+        },
+        {
+          "label": "The Netherlands",
+          "value": "nl"
+        }
+      ],
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000009"
+    },
+    {
+      "type": "textarea",
+      "label": "Bio",
+      "name": "bio",
+      "required": false,
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000010"
+    },
+    {
+      "type": "checkbox",
+      "label": "I agree to the terms and conditions",
+      "name": "terms",
+      "required": true,
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000011"
+    },
+    {
+      "type": "description",
+      "label": "<h1>This is a description</h1>\n\n<p>Here we will support HTML tags</p>\n",
+      "name": "description",
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000012"
+    },
+    {
+      "type": "file",
+      "label": "Add a file",
+      "name": "file",
+      "required": true,
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000013"
+    }
+  ],
+  "sections": [
+    {
+      "title": "<h1>Identification</h1>\n\n<p><img alt=\"ID Card Color icon PNG and SVG Vector Free Download\" src=\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzRLynGuRfxgxbM1SdTqhYWm39PHEpWu96Xg&amp;s\" /></p>\n\n<p>This section will identify you, to have an idea of who has answered the form, and to make sure we address possible issues but don&#39;t worry, you can still be open about what you think and give suggestions that will help us improve.</p>\n",
+      "from": 0,
+      "to": 9,
+      "index": 0,
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000014"
+    },
+    {
+      "title": "<h1>About your current position</h1>\n\n<p>This is our second section and it supports HTML.</p>\n",
+      "from": 10,
+      "to": 11,
+      "index": 1,
+      "uuid": "1e8562c5-1541-4c6f-aabb-000000000015"
+    }
+  ]
+}
