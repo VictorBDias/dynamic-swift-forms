@@ -16,10 +16,10 @@ extension SectionEntity {
         return NSFetchRequest<SectionEntity>(entityName: "SectionEntity")
     }
 
-    @NSManaged public var title: String?
     @NSManaged public var from: Int64
-    @NSManaged public var to: Int64
     @NSManaged public var index: Int64
+    @NSManaged public var title: String?
+    @NSManaged public var to: Int64
     @NSManaged public var uuid: String?
     @NSManaged public var form: FormEntity?
 

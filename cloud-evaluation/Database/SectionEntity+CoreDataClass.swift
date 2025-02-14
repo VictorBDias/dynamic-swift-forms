@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc(SectionEntity)
+
 public class SectionEntity: NSManagedObject {
 
 }

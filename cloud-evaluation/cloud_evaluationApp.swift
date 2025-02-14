@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import CoreData
+import Foundation
 
 @main
 struct cloud_evaluationApp: App {

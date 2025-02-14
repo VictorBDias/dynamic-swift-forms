@@ -16,10 +16,10 @@ extension FieldEntity {
         return NSFetchRequest<FieldEntity>(entityName: "FieldEntity")
     }
 
-    @NSManaged public var type: String?
     @NSManaged public var label: String?
     @NSManaged public var name: String?
     @NSManaged public var required: Bool
+    @NSManaged public var type: String?
     @NSManaged public var uuid: String?
     @NSManaged public var form: FormEntity?
 

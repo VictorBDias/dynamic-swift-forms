@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc(FieldEntity)
+
 public class FieldEntity: NSManagedObject {
 
 }

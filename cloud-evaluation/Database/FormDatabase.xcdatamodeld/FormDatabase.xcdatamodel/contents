@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23231" systemVersion="24A335" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="FieldEntity" representedClassName="FieldEntity" syncable="YES" codeGenerationType="class">
+    <entity name="FieldEntity" representedClassName=".FieldEntity" syncable="YES" codeGenerationType="class">
         <attribute name="label" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="required" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -8,13 +8,13 @@
         <attribute name="uuid" optional="YES" attributeType="String"/>
         <relationship name="form" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FormEntity" inverseName="fields" inverseEntity="FormEntity"/>
     </entity>
-    <entity name="FormEntity" representedClassName="FormEntity" syncable="YES" codeGenerationType="class">
+    <entity name="FormEntity" representedClassName=".FormEntity" syncable="YES" codeGenerationType="class">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="fields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FieldEntity" inverseName="form" inverseEntity="FieldEntity"/>
         <relationship name="sections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SectionEntity" inverseName="form" inverseEntity="SectionEntity"/>
     </entity>
-    <entity name="SectionEntity" representedClassName="SectionEntity" syncable="YES" codeGenerationType="class">
+    <entity name="SectionEntity" representedClassName=".SectionEntity" syncable="YES" codeGenerationType="class">
         <attribute name="from" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="index" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
