@@ -9,6 +9,7 @@
         <relationship name="form" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FormEntity" inverseName="fields" inverseEntity="FormEntity"/>
     </entity>
     <entity name="FormEntity" representedClassName=".FormEntity" syncable="YES">
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="fields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FieldEntity" inverseName="form" inverseEntity="FieldEntity"/>
         <relationship name="sections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SectionEntity" inverseName="form" inverseEntity="SectionEntity"/>

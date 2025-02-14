@@ -17,6 +17,7 @@ extension FormEntity {
     }
 
     @NSManaged public var title: String?
+    @NSManaged public var timestamp: Date?
     @NSManaged public var fields: NSSet?
     @NSManaged public var sections: NSSet?
 
