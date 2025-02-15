@@ -31,7 +31,7 @@ struct FormEntriesView: View {
             VStack {
                 List {
                     ForEach(formEntries, id: \.uuid) { entry in
-                        NavigationLink(value: entry) {
+                        NavigationLink(destination: FormDetailView(formEntry: entry, form: form)) {
                             VStack(alignment: .leading) {
                                 Text("Entry ID: \(entry.uuid ?? "Unknown")")
                                     .font(.headline)
