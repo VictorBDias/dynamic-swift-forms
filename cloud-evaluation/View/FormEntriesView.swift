@@ -13,7 +13,11 @@ struct FormEntriesView: View {
 
     @Environment(\.managedObjectContext) private var viewContext
 
-
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \FormEntryEntity.timestamp, ascending: true)],
+        animation: .default)
+    private var formEntries: FetchedResults<FormEntryEntity>
+    
 
     var body: some View {
         NavigationView {
