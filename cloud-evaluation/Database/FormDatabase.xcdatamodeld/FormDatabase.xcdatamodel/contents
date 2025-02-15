@@ -11,8 +11,15 @@
     <entity name="FormEntity" representedClassName=".FormEntity" syncable="YES">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="entries" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FormEntryEntity" inverseName="form" inverseEntity="FormEntryEntity"/>
         <relationship name="fields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FieldEntity" inverseName="form" inverseEntity="FieldEntity"/>
         <relationship name="sections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SectionEntity" inverseName="form" inverseEntity="SectionEntity"/>
+    </entity>
+    <entity name="FormEntryEntity" representedClassName="FormEntryEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="data" optional="YES" attributeType="Binary"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="uuid" optional="YES" attributeType="String"/>
+        <relationship name="form" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FormEntity" inverseName="entries" inverseEntity="FormEntity"/>
     </entity>
     <entity name="SectionEntity" representedClassName=".SectionEntity" syncable="YES">
         <attribute name="from" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>

@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
-import CoreData
-import Foundation
 
 @main
 struct cloud_evaluationApp: App {
     let persistenceController = PersistenceController.shared
+
+    init() {
+        CoreDataManager.shared.loadFormsIfNeeded()
+    }
 
     var body: some Scene {
         WindowGroup {

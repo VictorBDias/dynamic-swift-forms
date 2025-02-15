@@ -20,7 +20,7 @@ struct FormView: View {
         NavigationView {
             List {
                 ForEach(forms) { form in
-                    NavigationLink(destination: FormDetailView(form: form)) {
+                    NavigationLink(destination: FormEntriesView(form: form)) {
                         VStack(alignment: .leading) {
                             Text(form.title ?? "Untitled Form")
                                 .font(.headline)
@@ -32,50 +32,10 @@ struct FormView: View {
                         }
                     }
                 }
-                .onDelete(perform: deleteForms)
             }
             .navigationTitle("Forms")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addForm) {
-                        Label("Add Form", systemImage: "plus")
-                    }
-                }
-            }
         }
     }
-
-    private func addForm() {
-        withAnimation {
-            let newForm = FormEntity(context: viewContext)
-            newForm.title = "New Form"
-            newForm.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-
-    private func deleteForms(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { forms[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-}
 
 private let itemFormatter: DateFormatter = {
     let formatter = DateFormatter()
@@ -84,6 +44,4 @@ private let itemFormatter: DateFormatter = {
     return formatter
 }()
 
-#Preview {
-    FormView().environment(\.managedObjectContext, CoreDataManager.shared.context)
 }

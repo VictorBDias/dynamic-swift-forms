@@ -12,11 +12,17 @@ class FormsViewModel: ObservableObject {
     @Published var forms: [FormEntity] = []
 
     func fetchForms() {
-        let request: NSFetchRequest<FormEntity> = FormEntity.fetchRequest()
+        let request = NSFetchRequest<FormEntity>(entityName: "FormEntity")
+        
         do {
             forms = try CoreDataManager.shared.context.fetch(request)
-        } catch {
-            print("Error fetching forms: \(error)")
+            if forms.isEmpty {
+                print("No forms found in Core Data.")
+            } else {
+                print("Loaded \(forms.count) forms from Core Data.")
+            }
+        } catch let error as NSError {
+            print("Core Data fetch error: \(error.localizedDescription), \(error.userInfo)")
         }
     }
 }

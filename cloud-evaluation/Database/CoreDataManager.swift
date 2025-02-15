@@ -7,7 +7,6 @@
 
 
 import CoreData
-import UIKit
 
 class CoreDataManager {
     static let shared = CoreDataManager()
@@ -34,7 +33,57 @@ class CoreDataManager {
         }
     }
 
-    func saveForm(_ form: FormModel) {
+    /// **Load JSON and Save to Core Data**
+    func loadFormsIfNeeded() {
+        let request: NSFetchRequest<FormEntity> = FormEntity.fetchRequest()
+        
+        do {
+            let existingForms = try context.fetch(request)
+            if existingForms.isEmpty {
+                print("No forms found. Loading from JSON...")
+                loadForms(from: "200-form.json")
+                loadForms(from: "all-fields.json")
+            } else {
+                print("Forms already exist in Core Data. Count: \(existingForms.count)")
+            }
+        } catch {
+            print("Error checking existing forms: \(error)")
+        }
+    }
+
+    func resetCoreData() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "FormEntity")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+        do {
+            try context.execute(deleteRequest)
+            try context.save()
+            print("Core Data Reset: All forms deleted.")
+        } catch {
+            print("Error resetting Core Data: \(error)")
+        }
+    }
+    
+
+    private func loadForms(from filename: String) {
+        guard let url = Bundle.main.url(forResource: filename, withExtension: nil) else {
+            print("Error: File \(filename) not found.")
+            return
+        }
+
+        do {
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            let form = try decoder.decode(FormModel.self, from: data)
+            saveForm(form)
+            print("Successfully loaded \(form.title) from \(filename)")
+        } catch {
+            print("Error loading JSON \(filename): \(error)")
+        }
+    }
+
+    /// **Convert FormModel into Core Data**
+    private func saveForm(_ form: FormModel) {
         let formEntity = FormEntity(context: context)
         formEntity.title = form.title
 
