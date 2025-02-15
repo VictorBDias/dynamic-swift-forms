@@ -10,62 +10,72 @@ import CoreData
 
 struct FormEntriesView: View {
     let form: FormEntity
-
     @Environment(\.managedObjectContext) private var viewContext
 
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \FormEntryEntity.timestamp, ascending: true)],
-        animation: .default)
-    private var formEntries: FetchedResults<FormEntryEntity>
+    @FetchRequest private var formEntries: FetchedResults<FormEntryEntity>
+
+    @State private var navigateToDetail = false
+    @State private var newEntry: FormEntryEntity?
+
+    init(form: FormEntity) {
+        let request: NSFetchRequest<FormEntryEntity> = FormEntryEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "form == %@", form)
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \FormEntryEntity.timestamp, ascending: true)]
+        
+        _formEntries = FetchRequest(fetchRequest: request)
+        self.form = form
+    }
 
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(formEntries.indices, id: \.self) { index in
-                    let entry = formEntries[index]
-                    NavigationLink(destination: FormDetailView(formEntry: entry, form: form)) {
-                        VStack(alignment: .leading) {
-                            Text("Entry ID: \(entry.uuid ?? "Unknown")")
-                                .font(.headline)
-                            if let date = entry.timestamp {
-                                Text("Created: \(date, formatter: dateFormatter)")
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
+        NavigationStack {
+            VStack {
+                List {
+                    ForEach(formEntries, id: \.uuid) { entry in
+                        NavigationLink(value: entry) {
+                            VStack(alignment: .leading) {
+                                Text("Entry ID: \(entry.uuid ?? "Unknown")")
+                                    .font(.headline)
+                                if let date = entry.timestamp {
+                                    Text("Created: \(date, formatter: dateFormatter)")
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                }
                             }
                         }
                     }
+                    .onDelete(perform: deleteEntries)
                 }
-                .onDelete(perform: deleteForms)
+                
+                Button(action: addEntry) {
+                    Label("Add Entry", systemImage: "plus")
+                }
+                .padding()
             }
-            .navigationTitle(form.title ?? <#default value#>)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+            .navigationTitle("Entries for \(form.title ?? "Form")")
+            .navigationDestination(isPresented: $navigateToDetail) {
+                if let entry = newEntry {
+                    FormDetailView(formEntry: entry, form: form)
                 }
-                ToolbarItem {
-                    Button(action: addForm) {
-                        Label("Add Form", systemImage: "plus")
-                    }
-                }
-            }
-        }
-    }
-
-    private func addForm() {
-        withAnimation {
-            let newForm = FormEntity(context: viewContext)
-            newForm.title = "New Form"
-            newForm.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                print("Error saving context: \(error)")
             }
         }
     }
 
-    private func deleteForms(offsets: IndexSet) {
+    private func addEntry() {
+        let entry = FormEntryEntity(context: viewContext)
+        entry.uuid = UUID().uuidString
+        entry.timestamp = Date()
+        entry.form = form  // Associate entry with the selected form
+        
+        do {
+            try viewContext.save()
+            newEntry = entry  // Store reference to navigate
+            navigateToDetail = true
+        } catch {
+            print("❌ Error saving new entry: \(error)")
+        }
+    }
+
+    private func deleteEntries(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
                 let entry = formEntries[index]
@@ -74,11 +84,11 @@ struct FormEntriesView: View {
             do {
                 try viewContext.save()
             } catch {
-                print("Error deleting entry: \(error)")
+                print("❌ Error deleting entry: \(error)")
             }
         }
     }
-    
+
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
