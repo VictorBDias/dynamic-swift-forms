@@ -30,7 +30,7 @@ class FormEntriesViewModel: ObservableObject {
         newEntry.form = form
 
         CoreDataManager.shared.saveContext()
-        fetchEntries(for: form) // Refresh list after adding
+        fetchEntries(for: form)
     }
 
     func deleteEntry(at offsets: IndexSet, form: FormEntity) {

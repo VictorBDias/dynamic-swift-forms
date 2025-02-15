@@ -9,25 +9,22 @@ import SwiftUI
 import CoreData
 
 struct FormEntriesView: View {
-    let formEntry: FormEntryEntity
+    let form: FormEntity
 
     @Environment(\.managedObjectContext) private var viewContext
 
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \FormEntryEntity.timestamp, ascending: true)],
-        animation: .default)
-    private var formEntries: FetchedResults<FormEntryEntity>
+
 
     var body: some View {
         NavigationView {
             List {
-                ForEach(formEntries) { entry in
-                    NavigationLink(destination: FormDetailView(formE: entry)) {
+                ForEach($formEntries) { entry in
+                    NavigationLink(destination: FormDetailView(formEntry: entry, form: form)) {
                         VStack(alignment: .leading) {
-                            Text(entry.description ?? "Untitled Form")
+                            Text("Entry ID: \(entry.uuid)")
                                 .font(.headline)
-                            if let timestamp = entry.timestamp {
-                                Text(timestamp, formatter: itemFormatter)
+                            if let date = entry.date {
+                                Text("Created: \(date, formatter: dateFormatter)")
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                             }
@@ -67,7 +64,7 @@ struct FormEntriesView: View {
 
     private func deleteForms(offsets: IndexSet) {
         withAnimation {
-            offsets.map { forms[$0] }.forEach(viewContext.delete)
+            offsets.map { formEntries[$0] }.forEach(viewContext.delete)
 
             do {
                 try viewContext.save()
@@ -77,6 +74,13 @@ struct FormEntriesView: View {
             }
         }
     }
+    
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .medium
+        return formatter
+    }()
 }
 
 private let itemFormatter: DateFormatter = {

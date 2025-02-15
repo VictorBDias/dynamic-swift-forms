@@ -2,7 +2,7 @@
 //  FieldEntity+CoreDataProperties.swift
 //  cloud-evaluation
 //
-//  Created by Victor Batisttete Dias on 14/02/25.
+//  Created by Victor Batisttete Dias on 15/02/25.
 //
 //
 
@@ -21,10 +21,16 @@ extension FieldEntity {
     @NSManaged public var required: Bool
     @NSManaged public var type: String?
     @NSManaged public var uuid: String?
+    @NSManaged public var options: Data?
     @NSManaged public var form: FormEntity?
 
 }
 
 extension FieldEntity : Identifiable {
-
+    var optionsArray: [FieldOption] {
+            guard let optionsData = self.options, 
+                  let decodedOptions = try? JSONDecoder().decode([FieldOption].self, from: optionsData)
+            else { return [] }
+            return decodedOptions
+        }
 }
