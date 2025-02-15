@@ -17,17 +17,17 @@ struct FormEntriesView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \FormEntryEntity.timestamp, ascending: true)],
         animation: .default)
     private var formEntries: FetchedResults<FormEntryEntity>
-    
 
     var body: some View {
         NavigationView {
             List {
-                ForEach($formEntries) { entry in
+                ForEach(formEntries.indices, id: \.self) { index in
+                    let entry = formEntries[index]
                     NavigationLink(destination: FormDetailView(formEntry: entry, form: form)) {
                         VStack(alignment: .leading) {
-                            Text("Entry ID: \(entry.uuid)")
+                            Text("Entry ID: \(entry.uuid ?? "Unknown")")
                                 .font(.headline)
-                            if let date = entry.date {
+                            if let date = entry.timestamp {
                                 Text("Created: \(date, formatter: dateFormatter)")
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
@@ -60,21 +60,21 @@ struct FormEntriesView: View {
             do {
                 try viewContext.save()
             } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                print("Error saving context: \(error)")
             }
         }
     }
 
     private func deleteForms(offsets: IndexSet) {
         withAnimation {
-            offsets.map { formEntries[$0] }.forEach(viewContext.delete)
-
+            for index in offsets {
+                let entry = formEntries[index]
+                viewContext.delete(entry)
+            }
             do {
                 try viewContext.save()
             } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                print("Error deleting entry: \(error)")
             }
         }
     }
@@ -85,15 +85,4 @@ struct FormEntriesView: View {
         formatter.timeStyle = .medium
         return formatter
     }()
-}
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
-
-#Preview {
-    FormView().environment(\.managedObjectContext, CoreDataManager.shared.context)
 }
