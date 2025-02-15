@@ -2,7 +2,7 @@
 //  SectionEntity+CoreDataClass.swift
 //  cloud-evaluation
 //
-//  Created by Victor Batisttete Dias on 14/02/25.
+//  Created by Victor Batisttete Dias on 15/02/25.
 //
 //
 

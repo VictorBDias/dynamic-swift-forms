@@ -4,12 +4,11 @@
 //
 //  Created by Victor Batisttete Dias on 13/02/25.
 //
-
 import SwiftUI
 
 @main
 struct cloud_evaluationApp: App {
-    let persistenceController = PersistenceController.shared
+    let coreDataManager = CoreDataManager.shared  // Use CoreDataManager for context
 
     init() {
         CoreDataManager.shared.loadFormsIfNeeded()
@@ -18,7 +17,7 @@ struct cloud_evaluationApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.managedObjectContext, coreDataManager.context)  // Use CoreDataManager's context
         }
     }
 }

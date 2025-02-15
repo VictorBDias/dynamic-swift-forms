@@ -51,19 +51,20 @@ class CoreDataManager {
         }
     }
 
-    func resetCoreData() {
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "FormEntity")
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-
+    func resetPersistentStore() {
+        guard let storeURL = persistentContainer.persistentStoreDescriptions.first?.url else { return }
         do {
-            try context.execute(deleteRequest)
-            try context.save()
-            print("Core Data Reset: All forms deleted.")
+            try persistentContainer.persistentStoreCoordinator.destroyPersistentStore(
+                at: storeURL, ofType: NSSQLiteStoreType, options: nil
+            )
+            try persistentContainer.persistentStoreCoordinator.addPersistentStore(
+                ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil
+            )
+            print("✅ Core Data Reset Successfully")
         } catch {
-            print("Error resetting Core Data: \(error)")
+            print("❌ Error resetting Core Data: \(error)")
         }
     }
-    
 
     private func loadForms(from filename: String) {
         guard let url = Bundle.main.url(forResource: filename, withExtension: nil) else {

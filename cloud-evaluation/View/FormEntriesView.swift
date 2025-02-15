@@ -23,7 +23,7 @@ struct FormEntriesView: View {
             List {
                 ForEach(formEntries.indices, id: \.self) { index in
                     let entry = formEntries[index]
-                    NavigationLink(destination: FormDetailView(formEntry: entry, form: form)) {
+                    NavigationLink(destination: FormView()) {
                         VStack(alignment: .leading) {
                             Text("Entry ID: \(entry.uuid ?? "Unknown")")
                                 .font(.headline)

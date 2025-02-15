@@ -2,7 +2,7 @@
 //  FormEntity+CoreDataProperties.swift
 //  cloud-evaluation
 //
-//  Created by Victor Batisttete Dias on 14/02/25.
+//  Created by Victor Batisttete Dias on 15/02/25.
 //
 //
 
@@ -16,10 +16,11 @@ extension FormEntity {
         return NSFetchRequest<FormEntity>(entityName: "FormEntity")
     }
 
-    @NSManaged public var title: String?
     @NSManaged public var timestamp: Date?
+    @NSManaged public var title: String?
     @NSManaged public var fields: NSSet?
     @NSManaged public var sections: NSSet?
+    @NSManaged public var entries: FormEntryEntity?
 
 }
 
@@ -58,11 +59,5 @@ extension FormEntity {
 }
 
 extension FormEntity : Identifiable {
-    var fieldsArray: [FieldEntity] {
-        (fields as? Set<FieldEntity>)?.sorted { $0.label ?? "" < $1.label ?? "" } ?? []
-    }
-    
-    var sectionsArray: [SectionEntity] {
-        (sections as? Set<SectionEntity>)?.sorted { $0.index < $1.index } ?? []
-    }
+
 }

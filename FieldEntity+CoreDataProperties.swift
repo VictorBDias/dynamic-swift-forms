@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension FieldEntity {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<FieldEntity> {
@@ -24,13 +23,12 @@ extension FieldEntity {
     @NSManaged public var options: Data?
     @NSManaged public var form: FormEntity?
 
+    var optionsArray: [FieldOption] {
+        guard let optionsData = self.options,
+              let decodedOptions = try? JSONDecoder().decode([FieldOption].self, from: optionsData)
+        else { return [] }
+        return decodedOptions
+    }
 }
 
-extension FieldEntity : Identifiable {
-    var optionsArray: [FieldOption] {
-            guard let optionsData = self.options, 
-                  let decodedOptions = try? JSONDecoder().decode([FieldOption].self, from: optionsData)
-            else { return [] }
-            return decodedOptions
-        }
-}
+extension FieldEntity : Identifiable {}
