@@ -37,7 +37,7 @@ struct FormEntriesView: View {
                 }
                 .onDelete(perform: deleteForms)
             }
-            .navigationTitle("Forms")
+            .navigationTitle(form.title ?? <#default value#>)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
