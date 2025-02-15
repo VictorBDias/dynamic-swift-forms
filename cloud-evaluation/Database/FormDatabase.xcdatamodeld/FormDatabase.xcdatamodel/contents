@@ -12,7 +12,7 @@
     <entity name="FormEntity" representedClassName=".FormEntity" syncable="YES">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
-        <relationship name="entries" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FormEntryEntity" inverseName="form" inverseEntity="FormEntryEntity"/>
+        <relationship name="entries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FormEntryEntity" inverseName="form" inverseEntity="FormEntryEntity"/>
         <relationship name="fields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FieldEntity" inverseName="form" inverseEntity="FieldEntity"/>
         <relationship name="sections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SectionEntity" inverseName="form" inverseEntity="SectionEntity"/>
     </entity>

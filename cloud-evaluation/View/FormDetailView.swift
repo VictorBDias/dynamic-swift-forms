@@ -13,9 +13,6 @@ struct FormDetailView: View {
             ForEach(form.fieldsArray, id: \.uuid) { field in
                 Section(header: Text(field.label ?? "Field")) {
                     getFieldView(for: field)
-                        .onAppear {
-                            print("Rendering field type:", field)
-                        }
                 }
             }
         }
@@ -26,7 +23,8 @@ struct FormDetailView: View {
         .onAppear(perform: loadExistingData)
     }
 
-    /// **Dynamically Render Form Fields Based on Type**
+
+    /// Dynamically Render Form Fields Based on Type
     @ViewBuilder
     private func getFieldView(for field: FieldEntity) -> some View {
         switch field.type {
@@ -59,7 +57,7 @@ struct FormDetailView: View {
                         Text(option.label).tag(option.value)
                     }
                 }
-                .pickerStyle(SegmentedPickerStyle()) // Radio button style
+                .pickerStyle(SegmentedPickerStyle())
             } else {
                 Text("No options available")
                     .foregroundColor(.red)
@@ -83,7 +81,7 @@ struct FormDetailView: View {
 
         case "description":
             WebView(html: field.label ?? "Description")
-                .frame(height: 100) // Adjust height as needed
+                .frame(height: 100)
 
         default:
             TextField(field.label ?? "Field", text: Binding(
@@ -92,16 +90,18 @@ struct FormDetailView: View {
             ))
         }
     }
-
-    /// **Load existing data from Core Data**
+    
+    /// Load existing data from Core Data
     private func loadExistingData() {
         if let savedData = formEntry.data,
            let decodedData = try? JSONDecoder().decode([String: String].self, from: savedData) {
             formData = decodedData
+        } else {
+            formData = [:] 
         }
     }
 
-    /// **Save user input to Core Data**
+    /// Save user input to Core Data
     private func saveEntry() {
         if let encodedData = try? JSONEncoder().encode(formData) {
             formEntry.data = encodedData
@@ -109,3 +109,4 @@ struct FormDetailView: View {
         }
     }
 }
+

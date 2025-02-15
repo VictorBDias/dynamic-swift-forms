@@ -31,7 +31,7 @@ struct FormEntriesView: View {
             VStack {
                 List {
                     ForEach(formEntries, id: \.uuid) { entry in
-                        NavigationLink(destination: FormDetailView(formEntry: entry, form: form)) {
+                        NavigationLink(value: entry) {
                             VStack(alignment: .leading) {
                                 Text("Entry ID: \(entry.uuid ?? "Unknown")")
                                     .font(.headline)
@@ -52,10 +52,11 @@ struct FormEntriesView: View {
                 .padding()
             }
             .navigationTitle("Entries for \(form.title ?? "Form")")
-            .navigationDestination(isPresented: $navigateToDetail) {
-                if let entry = newEntry {
-                    FormDetailView(formEntry: entry, form: form)
-                }
+            .navigationDestination(for: FormEntryEntity.self) { entry in
+                FormDetailView(formEntry: entry, form: form)
+            }
+            .onAppear {
+                print("Number of entries: \(formEntries.count)")
             }
         }
     }
@@ -64,17 +65,18 @@ struct FormEntriesView: View {
         let entry = FormEntryEntity(context: viewContext)
         entry.uuid = UUID().uuidString
         entry.timestamp = Date()
-        entry.form = form  // Associate entry with the selected form
+        entry.form = form
+        
+        print("Creating new entry with UUID: \(entry.uuid ?? "Unknown")")
         
         do {
             try viewContext.save()
-            newEntry = entry  // Store reference to navigate
+            newEntry = entry
             navigateToDetail = true
         } catch {
             print("❌ Error saving new entry: \(error)")
         }
     }
-
     private func deleteEntries(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
