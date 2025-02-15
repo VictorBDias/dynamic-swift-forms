@@ -1,10 +1,5 @@
-//
-//  FormDetailView.swift
-//  cloud-evaluation
-//
-//  Created by Victor Batisttete Dias on 14/02/25.
-//
 import SwiftUI
+import WebKit
 
 struct FormDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -16,10 +11,10 @@ struct FormDetailView: View {
     var body: some View {
         Form {
             ForEach(form.fieldsArray, id: \.uuid) { field in
-                Section(header: Text(renderHTML(field.label ?? "Field"))) {
+                Section(header: Text(field.label ?? "Field")) {
                     getFieldView(for: field)
-                        .onAppear { // ✅ Debugging field type
-                            print("Rendering field type:", field.type ?? "Unknown")
+                        .onAppear {
+                            print("Rendering field type:", field)
                         }
                 }
             }
@@ -35,20 +30,13 @@ struct FormDetailView: View {
     @ViewBuilder
     private func getFieldView(for field: FieldEntity) -> some View {
         switch field.type {
-        case "text":
-            TextField((try? AttributedString(markdown: field.label ?? "Field").description) ?? field.label ?? "Field", text: Binding(
-                get: { formData[field.uuid ?? ""] ?? "" },
-                set: { formData[field.uuid ?? ""] = $0 }
-            ))
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-
         case "number":
             Stepper(
                 value: Binding(
                     get: { Int(formData[field.uuid ?? ""] ?? "0") ?? 0 },
                     set: { formData[field.uuid ?? ""] = String($0) }
                 ),
-                in: 0...100 // Define the number range as needed
+                in: 0...100
             ) {
                 Text("\(formData[field.uuid ?? ""] ?? "0")")
             }
@@ -58,7 +46,7 @@ struct FormDetailView: View {
                 get: { formData[field.uuid ?? ""] == "true" },
                 set: { formData[field.uuid ?? ""] = $0 ? "true" : "false" }
             )) {
-                Text(renderHTML(field.label ?? "Checkbox"))
+                Text(field.label ?? "Checkbox")
             }
 
         case "radio":
@@ -66,7 +54,7 @@ struct FormDetailView: View {
                 Picker(selection: Binding(
                     get: { formData[field.uuid ?? ""] ?? "" },
                     set: { formData[field.uuid ?? ""] = $0 }
-                ), label: Text(renderHTML(field.label ?? "Radio"))) {
+                ), label: Text(field.label ?? "Radio")) {
                     ForEach(field.optionsArray, id: \.value) { option in
                         Text(option.label).tag(option.value)
                     }
@@ -82,7 +70,7 @@ struct FormDetailView: View {
                 Picker(selection: Binding(
                     get: { formData[field.uuid ?? ""] ?? "" },
                     set: { formData[field.uuid ?? ""] = $0 }
-                ), label: Text(renderHTML(field.label ?? "Dropdown"))) {
+                ), label: Text(field.label ?? "Dropdown")) {
                     ForEach(field.optionsArray, id: \.value) { option in
                         Text(option.label).tag(option.value)
                     }
@@ -94,20 +82,15 @@ struct FormDetailView: View {
             }
 
         case "description":
-            Text(renderHTML(field.label ?? "Description"))
-                .foregroundColor(.gray)
+            WebView(html: field.label ?? "Description")
+                .frame(height: 100) // Adjust height as needed
 
         default:
-            TextField((try? AttributedString(markdown: field.label ?? "Field").description) ?? field.label ?? "Field", text: Binding(
+            TextField(field.label ?? "Field", text: Binding(
                 get: { formData[field.uuid ?? ""] ?? "" },
                 set: { formData[field.uuid ?? ""] = $0 }
             ))
         }
-    }
-
-    /// **Convert HTML to AttributedString for Display**
-    private func renderHTML(_ html: String) -> String {
-        return (try? AttributedString(markdown: html).description) ?? html
     }
 
     /// **Load existing data from Core Data**
