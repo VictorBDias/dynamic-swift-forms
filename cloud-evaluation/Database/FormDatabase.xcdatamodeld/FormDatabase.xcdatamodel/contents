@@ -3,6 +3,7 @@
     <entity name="FieldEntity" representedClassName=".FieldEntity" syncable="YES">
         <attribute name="label" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="options" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="required" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
@@ -15,7 +16,7 @@
         <relationship name="fields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FieldEntity" inverseName="form" inverseEntity="FieldEntity"/>
         <relationship name="sections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SectionEntity" inverseName="form" inverseEntity="SectionEntity"/>
     </entity>
-    <entity name="FormEntryEntity" representedClassName="FormEntryEntity" syncable="YES" codeGenerationType="class">
+    <entity name="FormEntryEntity" representedClassName=".FormEntryEntity" syncable="YES">
         <attribute name="data" optional="YES" attributeType="Binary"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>

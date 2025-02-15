@@ -8,52 +8,69 @@
 import SwiftUI
 
 struct FormDetailView: View {
-    let form: FormEntity
+    @Environment(\.managedObjectContext) private var viewContext
+
+    let formEntry: FormEntryEntity
+    @State private var formData: [String: String] = [:] // Store user input
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(form.title ?? "Untitled Form")
-                .font(.largeTitle)
-                .bold()
-            
-            if let timestamp = form.timestamp {
-                Text("Created on \(timestamp, formatter: itemFormatter)")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            }
-            
-            List {
-                Section(header: Text("Fields")) {
-                    ForEach(form.fieldsArray, id: \.uuid) { field in
-                        Text(field.label ?? "Unnamed Field")
-                    }
-                }
-
-                Section(header: Text("Sections")) {
-                    ForEach(form.sectionsArray, id: \.uuid) { section in
-                        Text(section.title ?? "Untitled Section")
-                    }
+        Form {
+            ForEach(formEntry.form?.fieldsArray ?? [], id: \.uuid) { field in
+                Section(header: Text(field.label ?? "Field")) {
+                    getFieldView(for: field)
                 }
             }
         }
-        .padding()
-        .navigationTitle("Form Details")
+        .navigationTitle("Fill Form Entry")
+        .toolbar {
+            Button("Save", action: saveEntry)
+        }
+        .onAppear(perform: loadExistingData)
+    }
+
+    // Dynamically generate input fields
+    @ViewBuilder
+    private func getFieldView(for field: FieldEntity) -> some View {
+        if field.type == "text" || field.type == "number" {
+            TextField(field.label ?? "Field", text: Binding(
+                get: { formData[field.uuid ?? ""] ?? "" },
+                set: { formData[field.uuid ?? ""] = $0 }
+            ))
+            .keyboardType(field.type == "number" ? .numberPad : .default)
+        } else if field.type == "dropdown", let options = field.optionsArray {
+            Picker(field.label ?? "Field", selection: Binding(
+                get: { formData[field.uuid ?? ""] ?? "" },
+                set: { formData[field.uuid ?? ""] = $0 }
+            )) {
+                ForEach(options, id: \.value) { option in
+                    Text(option.label).tag(option.value)
+                }
+            }
+            .pickerStyle(MenuPickerStyle())
+        } else if field.type == "description" {
+            Text(field.label ?? "Description")
+                .foregroundColor(.gray)
+        } else {
+            TextField(field.label ?? "Field", text: Binding(
+                get: { formData[field.uuid ?? ""] ?? "" },
+                set: { formData[field.uuid ?? ""] = $0 }
+            ))
+        }
+    }
+
+    // Load existing form data if available
+    private func loadExistingData() {
+        if let savedData = formEntry.data,
+           let decodedData = try? JSONDecoder().decode([String: String].self, from: savedData) {
+            formData = decodedData
+        }
+    }
+
+    // Save form data into Core Data
+    private func saveEntry() {
+        if let encodedData = try? JSONEncoder().encode(formData) {
+            formEntry.data = encodedData
+            try? viewContext.save()
+        }
     }
 }
-
-extension FormEntity {
-    var fieldsArray: [FieldEntity] {
-        (fields as? Set<FieldEntity>)?.sorted { $0.label ?? "" < $1.label ?? "" } ?? []
-    }
-    
-    var sectionsArray: [SectionEntity] {
-        (sections as? Set<SectionEntity>)?.sorted { $0.index < $1.index } ?? []
-    }
-}
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()

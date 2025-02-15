@@ -9,24 +9,24 @@ import SwiftUI
 import CoreData
 
 struct FormEntriesView: View {
-    let form: FormEntity
+    let formEntry: FormEntryEntity
 
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \FormEntity.timestamp, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \FormEntryEntity.timestamp, ascending: true)],
         animation: .default)
-    private var forms: FetchedResults<FormEntity>
+    private var formEntries: FetchedResults<FormEntryEntity>
 
     var body: some View {
         NavigationView {
             List {
-                ForEach(forms) { form in
-                    NavigationLink(destination: FormDetailView(form: form)) {
+                ForEach(formEntries) { entry in
+                    NavigationLink(destination: FormDetailView(formE: entry)) {
                         VStack(alignment: .leading) {
-                            Text(form.title ?? "Untitled Form")
+                            Text(entry.description ?? "Untitled Form")
                                 .font(.headline)
-                            if let timestamp = form.timestamp {
+                            if let timestamp = entry.timestamp {
                                 Text(timestamp, formatter: itemFormatter)
                                     .font(.subheadline)
                                     .foregroundColor(.gray)

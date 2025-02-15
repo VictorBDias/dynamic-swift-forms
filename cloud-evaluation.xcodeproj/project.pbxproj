@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F7C73692D60E56800DFF418 /* FormEntryEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C73672D60E56800DFF418 /* FormEntryEntity+CoreDataClass.swift */; };
+		4F7C736A2D60E56800DFF418 /* FormEntryEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C73682D60E56800DFF418 /* FormEntryEntity+CoreDataProperties.swift */; };
 		4FFE236D2D5EEC110013CB33 /* FormEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE236A2D5EEC110013CB33 /* FormEntity+CoreDataProperties.swift */; };
 		4FFE236E2D5EEC110013CB33 /* SectionEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE236B2D5EEC110013CB33 /* SectionEntity+CoreDataClass.swift */; };
 		4FFE236F2D5EEC110013CB33 /* SectionEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE236C2D5EEC110013CB33 /* SectionEntity+CoreDataProperties.swift */; };
@@ -33,6 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F7C73672D60E56800DFF418 /* FormEntryEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormEntryEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		4F7C73682D60E56800DFF418 /* FormEntryEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormEntryEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4FFE219D2D5EB6E70013CB33 /* cloud-evaluation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "cloud-evaluation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FFE21B32D5EB6E80013CB33 /* cloud-evaluationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "cloud-evaluationTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FFE21BD2D5EB6E80013CB33 /* cloud-evaluationUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "cloud-evaluationUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,6 +94,8 @@
 		4FFE21942D5EB6E70013CB33 = {
 			isa = PBXGroup;
 			children = (
+				4F7C73672D60E56800DFF418 /* FormEntryEntity+CoreDataClass.swift */,
+				4F7C73682D60E56800DFF418 /* FormEntryEntity+CoreDataProperties.swift */,
 				4FFE23672D5EEC110013CB33 /* FieldEntity+CoreDataClass.swift */,
 				4FFE23682D5EEC110013CB33 /* FieldEntity+CoreDataProperties.swift */,
 				4FFE23692D5EEC110013CB33 /* FormEntity+CoreDataClass.swift */,
@@ -262,6 +268,8 @@
 				4FFE236F2D5EEC110013CB33 /* SectionEntity+CoreDataProperties.swift in Sources */,
 				4FFE23702D5EEC110013CB33 /* FieldEntity+CoreDataClass.swift in Sources */,
 				4FFE23712D5EEC110013CB33 /* FieldEntity+CoreDataProperties.swift in Sources */,
+				4F7C73692D60E56800DFF418 /* FormEntryEntity+CoreDataClass.swift in Sources */,
+				4F7C736A2D60E56800DFF418 /* FormEntryEntity+CoreDataProperties.swift in Sources */,
 				4FFE23722D5EEC110013CB33 /* FormEntity+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
