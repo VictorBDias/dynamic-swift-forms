@@ -81,9 +81,11 @@ struct FormDetailView: View {
                 .foregroundColor(.gray)
 
             if !field.optionsArray.isEmpty {
+                let defaultSelection = formData[field.uuid ?? ""] ?? field.optionsArray.first?.value ?? ""
+
                 HStack {
                     Picker(selection: Binding(
-                        get: { formData[field.uuid ?? ""] ?? "" },
+                        get: { formData[field.uuid ?? ""] ?? defaultSelection },
                         set: { formData[field.uuid ?? ""] = $0 }
                     ), label: EmptyView()) {
                         ForEach(field.optionsArray, id: \.value) { option in
@@ -106,6 +108,7 @@ struct FormDetailView: View {
                 Text("No options available")
                     .foregroundColor(.red)
             }
+
 
         case "description":
             WebView(html: field.label ?? "Description")
