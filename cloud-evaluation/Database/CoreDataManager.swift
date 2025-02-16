@@ -86,14 +86,14 @@ class CoreDataManager {
     private func saveForm(_ form: FormModel) {
         let formEntity = FormEntity(context: context)
         formEntity.title = form.title
-
-        for field in form.fields {
+        for (index, field) in form.fields.enumerated() {
             let fieldEntity = FieldEntity(context: context)
             fieldEntity.type = field.normalizedType
             fieldEntity.label = field.label
             fieldEntity.name = field.name
             fieldEntity.required = field.required ?? false
             fieldEntity.uuid = field.uuid
+            fieldEntity.index = Int64(index)
             fieldEntity.form = formEntity
             if let options = field.options {
                 do {
