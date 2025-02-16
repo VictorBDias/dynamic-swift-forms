@@ -31,10 +31,10 @@ Open a terminal and run:
 
 # Screenshots
 <div style="display: flex; justify-content: space-between;">
-  <img src="cloud-evaluation/cloud-evaluation/Assets/Screenshot1.png" width="30%" />
-  <img src="cloud-evaluation/cloud-evaluation/Assets/Screenshot2.png" width="30%" />
-  <img src="cloud-evaluation/cloud-evaluation/Assets/Screenshot3.png" width="30%" />
-  <img src="cloud-evaluation/cloud-evaluation/Assets/Screenshot4.png" width="30%" />
-  <img src="cloud-evaluation/cloud-evaluation/Assets/Screenshot5.png" width="30%" />
+  <img src="cloud-evaluation/Assets/Screenshot1.png" width="30%" />
+  <img src="cloud-evaluation/Assets/Screenshot2.png" width="30%" />
+  <img src="cloud-evaluation/Assets/Screenshot3.png" width="30%" />
+  <img src="cloud-evaluation/Assets/Screenshot4.png" width="30%" />
+  <img src="cloud-evaluation/Assets/Screenshot5.png" width="30%" />
 
 </div>
