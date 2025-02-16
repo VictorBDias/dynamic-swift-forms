@@ -24,10 +24,13 @@ A dynamic form rendering system built using SwiftUI and Core Data. This project 
 ### 1️⃣ Clone the Repository
 
 Open a terminal and run:
-- git clone https://github.com/your-username/dynamic-swift-forms.git
-- cd dynamic-swift-forms
-- xed .
-- Run the project using ⌘ + R.
+
+```bash
+git clone https://github.com/your-username/dynamic-swift-forms.git
+cd dynamic-swift-forms
+xed .
+```
+- Run the project using ⌘ + R or xcode play button.
 
 # Screenshots
 <div style="display: flex; justify-content: space-between;">
