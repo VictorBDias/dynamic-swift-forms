@@ -15,6 +15,9 @@ struct FormDetailView: View {
     let formEntry: FormEntryEntity
     let form: FormEntity
     @State private var formData: [String: String] = [:]
+    
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         ScrollView {
@@ -24,11 +27,10 @@ struct FormDetailView: View {
                         WebView(html: section.title ?? "Section")
                             .frame(height: 140)
                     }) {
-                        let sectionFields = form.fieldsArray.filter { field in
-                            guard let fieldIndex = form.fieldsArray.firstIndex(where: { $0.uuid == field.uuid }) else {
-                                return false
-                            }
-                            return fieldIndex >= section.from && fieldIndex <= section.to
+                        let sectionFields = form.fieldsArray.sorted {
+                            ($0.value(forKey: "index") as? Int64 ?? 0) < ($1.value(forKey: "index") as? Int64 ?? 0)
+                        }.filter { field in
+                            field.index >= section.from && field.index <= section.to
                         }
 
                         ForEach(sectionFields, id: \.uuid) { field in
@@ -52,17 +54,31 @@ struct FormDetailView: View {
         }
         .onAppear(perform: loadExistingData)
         .navigationBarBackButtonHidden(true)
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("⚠️ Missing Required Fields"),
+                  message: Text(alertMessage),
+                  dismissButton: .default(Text("OK")))
+        }
     }
 
     /// Dynamically Render Form Fields Based on Type
     @ViewBuilder
     private func getFieldView(for field: FieldEntity) -> some View {
-        switch field.type {
-        case "number":
-            VStack(alignment: .leading) {
-                Text(field.label ?? "Label")
-                    .foregroundColor(.gray)
+        VStack(alignment: .leading) {
+            HStack {
+                if field.type != "description" {
+                    
+                    Text(field.label ?? "Label")
+                        .foregroundColor(.gray)
+                    if field.required {
+                        Text("*")
+                            .foregroundColor(.red)
+                    }
+                }
+                   }
 
+            switch field.type {
+            case "number":
                 Stepper(
                     value: Binding(
                         get: { Int(formData[field.uuid ?? ""] ?? "0") ?? 0 },
@@ -76,47 +92,30 @@ struct FormDetailView: View {
                         .background(Color.gray.opacity(0.1))
                         .cornerRadius(5)
                 }
-            }
 
-        case "dropdown":
-            VStack(alignment: .leading) {
-                Text(field.label ?? "Label")
-                    .foregroundColor(.gray)
-
+            case "dropdown":
                 if !field.optionsArray.isEmpty {
                     let defaultSelection = formData[field.uuid ?? ""] ?? field.optionsArray.first?.value ?? ""
-
-                    HStack {
-                        Picker(selection: Binding(
-                            get: { formData[field.uuid ?? ""] ?? defaultSelection },
-                            set: { formData[field.uuid ?? ""] = $0 }
-                        ), label: EmptyView()) {
-                            ForEach(field.optionsArray, id: \.value) { option in
-                                Text(option.label)
-                                    .tag(option.value)
-                                    .padding(.vertical, 10)
-                            }
+                    Picker(selection: Binding(
+                        get: { formData[field.uuid ?? ""] ?? defaultSelection },
+                        set: { formData[field.uuid ?? ""] = $0 }
+                    ), label: Text("Select")) {
+                        ForEach(field.optionsArray, id: \.value) { option in
+                            Text(option.label).tag(option.value)
                         }
-                        .pickerStyle(MenuPickerStyle())
-                        .frame(height: 50)
-                        .cornerRadius(5)
-
-                        Spacer()
                     }
-                    .frame(height: 50)
-                    .padding(.horizontal, 10)
+                    .pickerStyle(MenuPickerStyle())
+                    .padding()
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(5)
                 } else {
-                    Text("No options available")
-                        .foregroundColor(.red)
+                    Text("No options available").foregroundColor(.red)
                 }
-            }
 
-        case "description":
-            VStack(alignment: .leading) {
+            case "description":
                 WebView(html: field.label ?? "Description")
                     .frame(height: 40)
+                    .padding(.vertical, 8)
 
                 TextField("Fill the field", text: Binding(
                     get: { formData[field.uuid ?? ""] ?? "" },
@@ -125,14 +124,8 @@ struct FormDetailView: View {
                 .padding()
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(5)
-                .foregroundColor(.gray)
-            }
 
-        default:
-            VStack(alignment: .leading) { 
-                Text(field.label ?? "Label")
-                    .foregroundColor(.gray)
-
+            default:
                 TextField("Enter \(field.label ?? "text")", text: Binding(
                     get: { formData[field.uuid ?? ""] ?? "" },
                     set: { formData[field.uuid ?? ""] = $0 }
@@ -140,7 +133,6 @@ struct FormDetailView: View {
                 .padding()
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(5)
-                .foregroundColor(.gray)
             }
         }
     }
@@ -157,9 +149,22 @@ struct FormDetailView: View {
 
     /// Save user input to Core Data
     private func saveEntry() {
+        let missingRequiredFields = form.fieldsArray.filter { field in
+            field.required && (formData[field.uuid ?? ""]?.isEmpty ?? true)
+        }
+
+        if !missingRequiredFields.isEmpty {
+            let missingFields = missingRequiredFields.map { $0.label ?? "Unknown Field" }.joined(separator: ", ")
+            alertMessage = "Please fill in the required fields: \(missingFields)"
+            showAlert = true
+            return
+        }
+
         if let encodedData = try? JSONEncoder().encode(formData) {
             formEntry.data = encodedData
             try? viewContext.save()
+            alertMessage = "✅ Form entry saved successfully!"
+            showAlert = true
         }
     }
 }
