@@ -95,6 +95,14 @@ class CoreDataManager {
             fieldEntity.required = field.required ?? false
             fieldEntity.uuid = field.uuid
             fieldEntity.form = formEntity
+            if let options = field.options {
+                do {
+                    let optionsData = try JSONEncoder().encode(options)
+                    fieldEntity.options = optionsData
+                } catch {
+                    print("Error encoding options")
+                }
+            }
         }
 
         if let sections = form.sections {

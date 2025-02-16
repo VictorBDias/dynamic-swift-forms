@@ -33,6 +33,7 @@ struct FormDetailView: View {
 
                     ForEach(sectionFields, id: \.uuid) { field in
                         getFieldView(for: field)
+
                     }
                 }
             }
@@ -80,16 +81,25 @@ struct FormDetailView: View {
                 .foregroundColor(.gray)
 
             if !field.optionsArray.isEmpty {
-                Picker(selection: Binding(
-                    get: { formData[field.uuid ?? ""] ?? "" },
-                    set: { formData[field.uuid ?? ""] = $0 }
-                ), label: Text(field.label ?? "Dropdown").foregroundColor(.gray)) {
-                    ForEach(field.optionsArray, id: \.value) { option in
-                        Text(option.label).tag(option.value)
-                            .foregroundColor(.gray) // Options in gray
+                HStack {
+                    Picker(selection: Binding(
+                        get: { formData[field.uuid ?? ""] ?? "" },
+                        set: { formData[field.uuid ?? ""] = $0 }
+                    ), label: EmptyView()) {
+                        ForEach(field.optionsArray, id: \.value) { option in
+                            Text(option.label)
+                                .tag(option.value)
+                                .padding(.vertical, 10)
+                        }
                     }
+                    .pickerStyle(MenuPickerStyle())
+                    .frame(height: 50)
+                    .cornerRadius(5)
+
+                    Spacer()
                 }
-                .pickerStyle(MenuPickerStyle())
+                .frame(height: 50)
+                .padding(.horizontal, 10)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(5)
             } else {

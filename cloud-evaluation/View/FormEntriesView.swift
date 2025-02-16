@@ -55,9 +55,6 @@ struct FormEntriesView: View {
             .navigationDestination(for: FormEntryEntity.self) { entry in
                 FormDetailView(formEntry: entry, form: form)
             }
-            .onAppear {
-                print("Number of entries: \(formEntries.count)")
-            }
         }
     }
 
