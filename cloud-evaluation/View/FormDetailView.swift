@@ -11,12 +11,20 @@ struct FormDetailView: View {
     var body: some View {
         Form {
             ForEach(form.fieldsArray, id: \.uuid) { field in
-                Section(header: Text(field.label ?? "Field")) {
-                    getFieldView(for: field)
-                }
-            }
+                           Section(header: VStack(alignment: .leading) {
+                               if field.type == "description" {
+                                   WebView(html: field.label ?? "Description")
+                                       .frame(height: 40)
+                               } else {
+                                   Text(field.label ?? "Field")
+                               }
+                           }) {
+                               getFieldView(for: field)
+                           }
+                       }
         }
-        .navigationTitle("Fill Form Entry")
+        .navigationTitle("Fill the form")
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             Button("Save", action: saveEntry)
         }
@@ -80,11 +88,13 @@ struct FormDetailView: View {
             }
 
         case "description":
-            WebView(html: field.label ?? "Description")
-                .frame(height: 100)
+            TextField("Fill the field", text: Binding(
+                get: { formData[field.uuid ?? ""] ?? "" },
+                set: { formData[field.uuid ?? ""] = $0 }
+            ))
 
         default:
-            TextField(field.label ?? "Field", text: Binding(
+            TextField("Fill the field", text: Binding(
                 get: { formData[field.uuid ?? ""] ?? "" },
                 set: { formData[field.uuid ?? ""] = $0 }
             ))
