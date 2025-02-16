@@ -18,7 +18,7 @@ struct FormDetailView: View {
 
     var body: some View {
         ScrollView {
-            LazyVStack(alignment: .leading) { // Align all content to the leading edge
+            LazyVStack(alignment: .leading) {
                 ForEach(form.sectionsArray, id: \.uuid) { section in
                     Section(header: VStack(alignment: .leading) {
                         WebView(html: section.title ?? "Section")
@@ -59,7 +59,7 @@ struct FormDetailView: View {
     private func getFieldView(for field: FieldEntity) -> some View {
         switch field.type {
         case "number":
-            VStack(alignment: .leading) { // Align content to the leading edge
+            VStack(alignment: .leading) {
                 Text(field.label ?? "Label")
                     .foregroundColor(.gray)
 
@@ -79,7 +79,7 @@ struct FormDetailView: View {
             }
 
         case "dropdown":
-            VStack(alignment: .leading) { // Align content to the leading edge
+            VStack(alignment: .leading) {
                 Text(field.label ?? "Label")
                     .foregroundColor(.gray)
 
@@ -114,7 +114,7 @@ struct FormDetailView: View {
             }
 
         case "description":
-            VStack(alignment: .leading) { // Align content to the leading edge
+            VStack(alignment: .leading) {
                 WebView(html: field.label ?? "Description")
                     .frame(height: 40)
 
@@ -129,7 +129,7 @@ struct FormDetailView: View {
             }
 
         default:
-            VStack(alignment: .leading) { // Align content to the leading edge
+            VStack(alignment: .leading) { 
                 Text(field.label ?? "Label")
                     .foregroundColor(.gray)
 
