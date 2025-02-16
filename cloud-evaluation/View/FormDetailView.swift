@@ -1,3 +1,12 @@
+//
+//  CoreDataManager.swift
+//  cloud-evaluation
+//
+//  Created by Victor Batisttete Dias on 15/02/25.
+//
+
+
+
 import SwiftUI
 import WebKit
 
@@ -6,37 +15,52 @@ struct FormDetailView: View {
 
     let formEntry: FormEntryEntity
     let form: FormEntity
-    @State private var formData: [String: String] = [:] // Store user input
+    @State private var formData: [String: String] = [:]
 
     var body: some View {
         Form {
-            ForEach(form.fieldsArray, id: \.uuid) { field in
-                           Section(header: VStack(alignment: .leading) {
-                               if field.type == "description" {
-                                   WebView(html: field.label ?? "Description")
-                                       .frame(height: 40)
-                               } else {
-                                   Text(field.label ?? "Field")
-                               }
-                           }) {
-                               getFieldView(for: field)
-                           }
-                       }
+            ForEach(form.sectionsArray, id: \.uuid) { section in
+                Section(header: VStack(alignment: .leading) {
+                    WebView(html: section.title ?? "Section")
+                        .frame(height: 100)
+                }) {
+                    let sectionFields = form.fieldsArray.filter { field in
+                        guard let fieldIndex = form.fieldsArray.firstIndex(where: { $0.uuid == field.uuid }) else {
+                            return false
+                        }
+                        return fieldIndex >= section.from && fieldIndex <= section.to
+                    }
+
+                    ForEach(sectionFields, id: \.uuid) { field in
+                        getFieldView(for: field)
+                    }
+                }
+            }
         }
-        .navigationTitle("Fill the form")
-        .navigationBarBackButtonHidden(true)
+        .navigationTitle("")
         .toolbar {
-            Button("Save", action: saveEntry)
+            ToolbarItem(placement: .principal) {
+                Text("Fill Form Entry")
+                    .font(.system(size: 16, weight: .semibold))
+            }
+
+
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Save", action: saveEntry)
+            }
         }
         .onAppear(perform: loadExistingData)
+        .navigationBarBackButtonHidden(true)
     }
-
 
     /// Dynamically Render Form Fields Based on Type
     @ViewBuilder
     private func getFieldView(for field: FieldEntity) -> some View {
         switch field.type {
         case "number":
+            Text(field.label ?? "Label")
+                .foregroundColor(.gray)
+
             Stepper(
                 value: Binding(
                     get: { Int(formData[field.uuid ?? ""] ?? "0") ?? 0 },
@@ -45,69 +69,70 @@ struct FormDetailView: View {
                 in: 0...100
             ) {
                 Text("\(formData[field.uuid ?? ""] ?? "0")")
-            }
-
-        case "checkbox":
-            Toggle(isOn: Binding(
-                get: { formData[field.uuid ?? ""] == "true" },
-                set: { formData[field.uuid ?? ""] = $0 ? "true" : "false" }
-            )) {
-                Text(field.label ?? "Checkbox")
-            }
-
-        case "radio":
-            if !field.optionsArray.isEmpty {
-                Picker(selection: Binding(
-                    get: { formData[field.uuid ?? ""] ?? "" },
-                    set: { formData[field.uuid ?? ""] = $0 }
-                ), label: Text(field.label ?? "Radio")) {
-                    ForEach(field.optionsArray, id: \.value) { option in
-                        Text(option.label).tag(option.value)
-                    }
-                }
-                .pickerStyle(SegmentedPickerStyle())
-            } else {
-                Text("No options available")
-                    .foregroundColor(.red)
+                    .foregroundColor(.gray)
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(5)
             }
 
         case "dropdown":
+            Text(field.label ?? "Label")
+                .foregroundColor(.gray)
+
             if !field.optionsArray.isEmpty {
                 Picker(selection: Binding(
                     get: { formData[field.uuid ?? ""] ?? "" },
                     set: { formData[field.uuid ?? ""] = $0 }
-                ), label: Text(field.label ?? "Dropdown")) {
+                ), label: Text(field.label ?? "Dropdown").foregroundColor(.gray)) {
                     ForEach(field.optionsArray, id: \.value) { option in
                         Text(option.label).tag(option.value)
+                            .foregroundColor(.gray) // Options in gray
                     }
                 }
                 .pickerStyle(MenuPickerStyle())
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(5)
             } else {
                 Text("No options available")
                     .foregroundColor(.red)
             }
 
         case "description":
+            WebView(html: field.label ?? "Description")
+            .frame(height: 40)
+
             TextField("Fill the field", text: Binding(
                 get: { formData[field.uuid ?? ""] ?? "" },
                 set: { formData[field.uuid ?? ""] = $0 }
             ))
+            .padding()
+            .background(Color.gray.opacity(0.1))
+            .cornerRadius(5)
+            .foregroundColor(.gray)
 
         default:
-            TextField("Fill the field", text: Binding(
+            Text(field.label ?? "Label")
+                .foregroundColor(.gray)
+
+            TextField("Enter \(field.label ?? "text")", text: Binding(
                 get: { formData[field.uuid ?? ""] ?? "" },
                 set: { formData[field.uuid ?? ""] = $0 }
             ))
+            .padding()
+            .background(Color.gray.opacity(0.1))
+            .cornerRadius(5)
+            .foregroundColor(.gray)
         }
     }
-    
+
+
     /// Load existing data from Core Data
     private func loadExistingData() {
         if let savedData = formEntry.data,
            let decodedData = try? JSONDecoder().decode([String: String].self, from: savedData) {
             formData = decodedData
         } else {
-            formData = [:] 
+            formData = [:]
         }
     }
 
@@ -119,4 +144,3 @@ struct FormDetailView: View {
         }
     }
 }
-
