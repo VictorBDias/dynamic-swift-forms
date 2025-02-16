@@ -13,14 +13,13 @@ struct WebView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
-        webView.isOpaque = false // Make the web view transparent
-        webView.backgroundColor = .clear // Set background color to clear
-        webView.scrollView.backgroundColor = .clear // Set scroll view background to clear
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
+        webView.scrollView.backgroundColor = .clear
         return webView
     }
 
     func updateUIView(_ uiView: WKWebView, context: Context) {
-        // Wrap the HTML in a style to ensure the background is transparent
         let transparentHTML = """
         <html>
             <head>

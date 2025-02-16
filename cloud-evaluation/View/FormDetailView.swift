@@ -22,7 +22,7 @@ struct FormDetailView: View {
                 ForEach(form.sectionsArray, id: \.uuid) { section in
                     Section(header: VStack(alignment: .leading) {
                         WebView(html: section.title ?? "Section")
-                            .frame(height: 100)
+                            .frame(height: 140)
                     }) {
                         let sectionFields = form.fieldsArray.filter { field in
                             guard let fieldIndex = form.fieldsArray.firstIndex(where: { $0.uuid == field.uuid }) else {

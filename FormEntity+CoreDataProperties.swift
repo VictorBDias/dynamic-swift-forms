@@ -77,11 +77,10 @@ extension FormEntity {
 
 extension FormEntity : Identifiable {
     var fieldsArray: [FieldEntity] {
-        (fields as? Set<FieldEntity>)?.sorted { $0.label ?? "" < $1.label ?? "" } ?? []
+        (fields as? Set<FieldEntity>)?.map { $0 } ?? []
     }
     
     var sectionsArray: [SectionEntity] {
         (sections as? Set<SectionEntity>)?.sorted { $0.index < $1.index } ?? []
     }
 }
-
