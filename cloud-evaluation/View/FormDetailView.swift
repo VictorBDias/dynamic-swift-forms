@@ -11,6 +11,7 @@ import WebKit
 
 struct FormDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.presentationMode) var presentationMode // For navigating back
 
     let formEntry: FormEntryEntity
     let form: FormEntity
@@ -149,13 +150,18 @@ struct FormDetailView: View {
 
     /// Save user input to Core Data
     private func saveEntry() {
-        let missingRequiredFields = form.fieldsArray.filter { field in
-            field.required && (formData[field.uuid ?? ""]?.isEmpty ?? true)
-        }
-
+        
+        let renderedFields = form.sectionsArray.flatMap { section in
+                   form.fieldsArray.filter { $0.index >= section.from && $0.index <= section.to }
+               }
+        
+        let missingRequiredFields = renderedFields.filter { field in
+                 field.required && (formData[field.uuid ?? ""]?.isEmpty ?? true)
+             }
+        
         if !missingRequiredFields.isEmpty {
-            let missingFields = missingRequiredFields.map { $0.label ?? "Unknown Field" }.joined(separator: ", ")
-            alertMessage = "Please fill in the required fields: \(missingFields)"
+            _ = missingRequiredFields.map { $0.label ?? "Unknown Field" }.joined(separator: ", ")
+            alertMessage = "Please fill in all the required fields"
             showAlert = true
             return
         }
@@ -163,8 +169,9 @@ struct FormDetailView: View {
         if let encodedData = try? JSONEncoder().encode(formData) {
             formEntry.data = encodedData
             try? viewContext.save()
-            alertMessage = "✅ Form entry saved successfully!"
-            showAlert = true
         }
+        
+        presentationMode.wrappedValue.dismiss()
+
     }
 }
