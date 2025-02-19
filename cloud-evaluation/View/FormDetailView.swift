@@ -11,7 +11,7 @@ import WebKit
 
 struct FormDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.presentationMode) var presentationMode // For navigating back
+    @Environment(\.presentationMode) var presentationMode 
 
     let formEntry: FormEntryEntity
     let form: FormEntity

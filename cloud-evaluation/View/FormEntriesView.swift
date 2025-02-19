@@ -14,8 +14,8 @@ struct FormEntriesView: View {
 
     @FetchRequest private var formEntries: FetchedResults<FormEntryEntity>
 
-    @State private var navigateToDetail = false
     @State private var newEntry: FormEntryEntity?
+    @State private var isNavigating = false
 
     init(form: FormEntity) {
         let request: NSFetchRequest<FormEntryEntity> = FormEntryEntity.fetchRequest()
@@ -45,7 +45,7 @@ struct FormEntriesView: View {
                     }
                     .onDelete(perform: deleteEntries)
                 }
-                
+
                 Button(action: addEntry) {
                     Label("Add Entry", systemImage: "plus")
                 }
@@ -55,6 +55,11 @@ struct FormEntriesView: View {
             .navigationDestination(for: FormEntryEntity.self) { entry in
                 FormDetailView(formEntry: entry, form: form)
             }
+            .navigationDestination(isPresented: $isNavigating) {
+                if let newEntry = newEntry {
+                    FormDetailView(formEntry: newEntry, form: form)
+                }
+            }
         }
     }
 
@@ -63,17 +68,16 @@ struct FormEntriesView: View {
         entry.uuid = UUID().uuidString
         entry.timestamp = Date()
         entry.form = form
-        
-        print("Creating new entry with UUID: \(entry.uuid ?? "Unknown")")
-        
+                
         do {
             try viewContext.save()
             newEntry = entry
-            navigateToDetail = true
+            isNavigating = true
         } catch {
             print("❌ Error saving new entry: \(error)")
         }
     }
+
     private func deleteEntries(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
