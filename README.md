@@ -26,7 +26,7 @@ A dynamic form rendering system built using SwiftUI and Core Data. This project 
 Open a terminal and run:
 
 ```bash
-git clone https://github.com/your-username/dynamic-swift-forms.git
+git clone git@github.com:VictorBDias/dynamic-swift-forms.git
 cd dynamic-swift-forms
 xed .
 ```
