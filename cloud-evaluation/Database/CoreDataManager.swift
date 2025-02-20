@@ -120,3 +120,15 @@ class CoreDataManager {
         saveContext()
     }
 }
+
+extension NSManagedObjectContext {
+    func fetchAllForms() -> [FormEntity] {
+        let request: NSFetchRequest<FormEntity> = FormEntity.fetchRequest()
+        do {
+            return try self.fetch(request)
+        } catch {
+            print("Error fetching forms: \(error)")
+            return []
+        }
+    }
+}

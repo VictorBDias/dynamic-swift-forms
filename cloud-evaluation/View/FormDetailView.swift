@@ -5,13 +5,13 @@
 //  Created by Victor Batisttete Dias on 15/02/25.
 //
 
-
 import SwiftUI
 import WebKit
+import Combine
 
 struct FormDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.presentationMode) var presentationMode 
+    @Environment(\.presentationMode) var presentationMode
 
     let formEntry: FormEntryEntity
     let form: FormEntity
@@ -19,6 +19,11 @@ struct FormDetailView: View {
     
     @State private var showAlert = false
     @State private var alertMessage = ""
+    
+    @State private var autoSaveTimer: Timer.TimerPublisher = Timer.publish(every: 5, on: .main, in: .common)
+    @State private var timerCancellable: Cancellable?
+
+    private var entryId: String { formEntry.uuid ?? "unknown_form" }
 
     var body: some View {
         ScrollView {
@@ -53,13 +58,30 @@ struct FormDetailView: View {
                 Button("Save", action: saveEntry)
             }
         }
-        .onAppear(perform: loadExistingData)
+        .onAppear(perform: {
+            loadExistingData()
+            self.timerCancellable = autoSaveTimer.connect()
+        })
+        .onDisappear {
+            print("✅ DISAPPEAR")
+            self.timerCancellable?.cancel()
+            LocalStorageManager.shared.clearFormProgress(for: entryId)
+        }
+        .onReceive(autoSaveTimer) { _ in
+            autoSaveProgress()
+        }
         .navigationBarBackButtonHidden(true)
         .alert(isPresented: $showAlert) {
             Alert(title: Text("⚠️ Missing Required Fields"),
                   message: Text(alertMessage),
                   dismissButton: .default(Text("OK")))
         }
+    }
+    
+    /// Save progress periodically
+    private func autoSaveProgress() {
+        LocalStorageManager.shared.saveFormProgress(for: entryId, data: formData)
+        print("✅ Auto-saved progress for \(entryId)")
     }
 
     /// Dynamically Render Form Fields Based on Type
@@ -68,7 +90,6 @@ struct FormDetailView: View {
         VStack(alignment: .leading) {
             HStack {
                 if field.type != "description" {
-                    
                     Text(field.label ?? "Label")
                         .foregroundColor(.gray)
                     if field.required {
@@ -76,7 +97,7 @@ struct FormDetailView: View {
                             .foregroundColor(.red)
                     }
                 }
-                   }
+            }
 
             switch field.type {
             case "number":
@@ -140,24 +161,30 @@ struct FormDetailView: View {
 
     /// Load existing data from Core Data
     private func loadExistingData() {
-        if let savedData = formEntry.data,
-           let decodedData = try? JSONDecoder().decode([String: String].self, from: savedData) {
+        if let savedData = LocalStorageManager.shared.getSavedFormProgress(for: formEntry.uuid ?? "") {
+            formData = savedData
+            print("Loaded saved progress from LocalStorageManager")
+        }
+        else if let savedData = formEntry.data,
+                let decodedData = try? JSONDecoder().decode([String: String].self, from: savedData) {
             formData = decodedData
-        } else {
+            print("Loaded saved progress from Core Data")
+        }
+        else {
             formData = [:]
+            print("No saved progress found. Starting with a new form.")
         }
     }
 
     /// Save user input to Core Data
     private func saveEntry() {
-        
         let renderedFields = form.sectionsArray.flatMap { section in
-                   form.fieldsArray.filter { $0.index >= section.from && $0.index <= section.to }
-               }
+            form.fieldsArray.filter { $0.index >= section.from && $0.index <= section.to }
+        }
         
         let missingRequiredFields = renderedFields.filter { field in
-                 field.required && (formData[field.uuid ?? ""]?.isEmpty ?? true)
-             }
+            field.required && (formData[field.uuid ?? ""]?.isEmpty ?? true)
+        }
         
         if !missingRequiredFields.isEmpty {
             _ = missingRequiredFields.map { $0.label ?? "Unknown Field" }.joined(separator: ", ")
@@ -171,7 +198,8 @@ struct FormDetailView: View {
             try? viewContext.save()
         }
         
-        presentationMode.wrappedValue.dismiss()
+        LocalStorageManager.shared.clearFormProgress(for: entryId)
 
+        presentationMode.wrappedValue.dismiss()
     }
 }
