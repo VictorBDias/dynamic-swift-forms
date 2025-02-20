@@ -23,6 +23,8 @@ struct FormDetailView: View {
     @State private var autoSaveTimer: Timer.TimerPublisher = Timer.publish(every: 5, on: .main, in: .common)
     @State private var timerCancellable: Cancellable?
 
+    @State private var isNavigatingBack = false
+
     private var entryId: String { formEntry.uuid ?? "unknown_form" }
 
     var body: some View {
@@ -57,15 +59,18 @@ struct FormDetailView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Save", action: saveEntry)
             }
+
         }
         .onAppear(perform: {
             loadExistingData()
             self.timerCancellable = autoSaveTimer.connect()
         })
         .onDisappear {
-            print("✅ DISAPPEAR")
+            if isNavigatingBack {
+                LocalStorageManager.shared.clearFormProgress(for: entryId)
+                print("✅ Cleared form progress on manual navigation back")
+            }
             self.timerCancellable?.cancel()
-            LocalStorageManager.shared.clearFormProgress(for: entryId)
         }
         .onReceive(autoSaveTimer) { _ in
             autoSaveProgress()
