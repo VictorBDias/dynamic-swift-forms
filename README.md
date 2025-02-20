@@ -4,6 +4,7 @@ A dynamic form rendering system built using SwiftUI and Core Data. This project 
 
 ## Technologies
 
+- **Swift** – Primary programming language.
 - **SwiftUI** – For building the UI.
 - **Core Data** – To persist forms and responses.
 - **Combine** – For reactive state management.
@@ -16,6 +17,7 @@ A dynamic form rendering system built using SwiftUI and Core Data. This project 
 - Supports multiple field types (text, dropdown, number, etc.).
 - Section-based grouping of fields.
 - Stores form entries and responses in Core Data.
+- Store form data in the local storage before save on Core Data
 - Displays required fields validation.
 - Uses SwiftUI animations and alerts for a smooth user experience.
 
