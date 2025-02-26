@@ -32,6 +32,24 @@ class CoreDataManager {
             print("Error saving context: \(error)")
         }
     }
+    
+    
+    private func loadForms(from filename: String) {
+        guard let url = Bundle.main.url(forResource: filename, withExtension: nil) else {
+            print("Error: File \(filename) not found.")
+            return
+        }
+
+        do {
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            let form = try decoder.decode(FormModel.self, from: data)
+            saveForm(form)
+            print("Successfully loaded \(form.title) from \(filename)")
+        } catch {
+            print("Error loading JSON \(filename): \(error)")
+        }
+    }
 
     /// **Load JSON and Save to Core Data**
     func loadFormsIfNeeded() {
@@ -64,23 +82,6 @@ class CoreDataManager {
         }
     }
     
-
-    private func loadForms(from filename: String) {
-        guard let url = Bundle.main.url(forResource: filename, withExtension: nil) else {
-            print("Error: File \(filename) not found.")
-            return
-        }
-
-        do {
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            let form = try decoder.decode(FormModel.self, from: data)
-            saveForm(form)
-            print("Successfully loaded \(form.title) from \(filename)")
-        } catch {
-            print("Error loading JSON \(filename): \(error)")
-        }
-    }
 
     /// **Convert FormModel into Core Data**
     private func saveForm(_ form: FormModel) {

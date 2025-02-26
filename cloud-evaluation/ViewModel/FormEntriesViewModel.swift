@@ -22,26 +22,4 @@ class FormEntriesViewModel: ObservableObject {
             print("Error fetching entries: \(error)")
         }
     }
-
-    func addEntry(for form: FormEntity) {
-        let newEntry = FormEntryEntity(context: CoreDataManager.shared.context)
-        newEntry.uuid = UUID().uuidString
-        newEntry.timestamp = Date()
-        newEntry.form = form
-
-        CoreDataManager.shared.saveContext()
-        fetchEntries(for: form)
-    }
-
-    func deleteEntry(at offsets: IndexSet, form: FormEntity) {
-        withAnimation {
-            offsets.map { entries[$0] }.forEach(CoreDataManager.shared.context.delete)
-            do {
-                try CoreDataManager.shared.context.save()
-                fetchEntries(for: form) // Refresh list
-            } catch {
-                print("Error deleting entry: \(error)")
-            }
-        }
-    }
 }

@@ -83,13 +83,11 @@ struct FormDetailView: View {
         }
     }
     
-    /// Save progress periodically
     private func autoSaveProgress() {
         LocalStorageManager.shared.saveFormProgress(for: entryId, data: formData)
         print("✅ Auto-saved progress for \(entryId)")
     }
 
-    /// Dynamically Render Form Fields Based on Type
     @ViewBuilder
     private func getFieldView(for field: FieldEntity) -> some View {
         VStack(alignment: .leading) {
@@ -164,7 +162,6 @@ struct FormDetailView: View {
         }
     }
 
-    /// Load existing data from Core Data
     private func loadExistingData() {
         if let savedData = LocalStorageManager.shared.getSavedFormProgress(for: formEntry.uuid ?? "") {
             formData = savedData
@@ -181,7 +178,6 @@ struct FormDetailView: View {
         }
     }
 
-    /// Save user input to Core Data
     private func saveEntry() {
         let renderedFields = form.sectionsArray.flatMap { section in
             form.fieldsArray.filter { $0.index >= section.from && $0.index <= section.to }
